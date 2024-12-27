@@ -11,8 +11,9 @@ def main():
     print("What catagories are you interested in?")
     print("General    Science    Sports    Business    Health\nEntertainment    Tech    Politics    Food    Travel")
     cat_input = input("Type your choices separated by a comma and space, then press <Enter> to submit\n--> ")
+    cat_input_lower = cat_input.lower()
 
-    categories = "business,tech,entertainment"
+    categories = cat_input_lower
     search = s_input
     news_stories = fetch_news(API_KEY, categories, search, limit=3)
 
