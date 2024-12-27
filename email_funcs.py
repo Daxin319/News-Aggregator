@@ -1,4 +1,5 @@
 import smtplib
+import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -30,3 +31,9 @@ def send_email(from_email, to_email, subject, body, smtp_server, smtp_port, emai
         print("Email sent successfully!")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+def validate_email(string):
+    if not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", string):
+        print("<------------------------------Invalid email address, please try again------------------------------>")
+        return False
+    return True

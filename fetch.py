@@ -21,3 +21,14 @@ def fetch_news(api_token, categories, search, limit=50):
     except json.JSONDecodeError:
         print('Error decoding JSON response')
         return []
+    
+def check_valid_cats(list):
+    valid_cats = ["general", "science", "sports", "business", "health", "entertainment", "tech", "politics", "food", "travel"]
+    
+    for item in list:
+        if item not in valid_cats:
+            print("<-------------------------------------Invalid catagories, please try again------------------------------------->")
+            return False
+        pass
+    return True
+            
