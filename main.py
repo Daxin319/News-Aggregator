@@ -7,8 +7,13 @@ def main():
         API_KEY = config['API_KEY']
         email_password = config['email_password']
 
+    s_input = input("What are you searching for? Press <Enter> to submit --> ")
+    print("What catagories are you interested in?")
+    print("General    Science    Sports    Business    Health\nEntertainment    Tech    Politics    Food    Travel")
+    cat_input = input("Type your choices separated by a comma and space, then press <Enter> to submit\n--> ")
+
     categories = "business,tech,entertainment"
-    search = "Disney"
+    search = s_input
     news_stories = fetch_news(API_KEY, categories, search, limit=3)
 
     email_body = generate_email_body(news_stories)

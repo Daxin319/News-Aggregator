@@ -20,7 +20,7 @@ def send_email(from_email, to_email, subject, body, smtp_server, smtp_port, emai
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain'))
 
-        # Connect to the server
+        # Connect to the server and send the email
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(from_email, email_password)
