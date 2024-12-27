@@ -6,6 +6,7 @@ def main():
         config = json.load(config_file)
         API_KEY = config['API_KEY']
         email_password = config['email_password']
+        from_address = config['from_address']
 
     s_input = input("What are you searching for? Press <Enter> to submit --> ")
     while True:
@@ -29,7 +30,7 @@ def main():
     news_stories = fetch_news(API_KEY, categories, search, limit=3)
 
     email_body = generate_email_body(news_stories)
-    send_email('mailtesterdaemon@gmail.com', to_input, 'Your Top News Stories', email_body, "smtp.gmail.com", 587, email_password)
+    send_email(from_address, to_input, 'Your Top News Stories', email_body, "smtp.gmail.com", 587, email_password)
 
 if __name__ == "__main__":
     main()
