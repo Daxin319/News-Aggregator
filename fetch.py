@@ -50,11 +50,13 @@ def define_search():
             with open(config_path, "r") as config_file:
                 config = json.load(config_file)
             
-            config["catagories"] = cats_list.join(", ")
+            config["catagories"] = ", ".join(cats_list)
             config["topic"] = s_input
             
             with open(config_path, "w") as config_file:
                 json.dump(config, config_file, indent=4)
+            
+            break
         
 def set_destination():
     while True:
@@ -67,3 +69,5 @@ def set_destination():
             
             with open(config_path, "w") as config_file:
                 json.dump(config, config_file, indent=4)
+
+            break
