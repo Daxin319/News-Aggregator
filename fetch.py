@@ -1,6 +1,7 @@
 import http.client, urllib.parse
 import json
 import os
+from datetime import date, timedelta
 from email_funcs import *
 from statics import *
 
@@ -11,6 +12,7 @@ def fetch_news(api_token, categories, search, limit=50):
         'search': search,
         'categories': categories,
         'language': 'en',
+        'published_after': (date.today()-timedelta(2)).isoformat(),
         'limit': limit
     })
     

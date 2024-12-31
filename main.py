@@ -91,7 +91,6 @@ def ensure_config_file():
         print("Config file verified.")
 
 def fetch_and_send():
-    print("fetch and send called")
     with open('config.json') as config_file:
         config = json.load(config_file)
         API_KEY = config['API_KEY']
@@ -109,7 +108,7 @@ def fetch_and_send():
 def set_schedule():
     match = False
     while match == False:
-        start_time = input("What time would you like your email to be sent? Use HH:MM in 24 hour format (6:00pm is 18:00, 8:15am is 08:15, etc)\n-->")
+        start_time = input("What time would you like your email to be sent? Use HH:MM in 24 hour format (6:00pm is 18:00, 8:15am is 08:15, etc)\n--> ")
         if not re.fullmatch(r"^([01][0-9]):([0-5][0-9])$", start_time):
             print("Invalid time format, please try again ")
         else:
@@ -117,14 +116,14 @@ def set_schedule():
     
     interval_match = False
     while interval_match == False:
-        interval = input("How long of an interval between emails?\n 1 - Minutes\n2 - Hours\n3 - Days\n4 - Weeks\n-->")
+        interval = input("How long of an interval between emails?\n 1 - Minutes\n2 - Hours\n3 - Days\n4 - Weeks\n--> ")
         valid_choices = ["1", "2", "3", "4"]
         if interval not in valid_choices:
             print("Invalid option, please try again.")
         else:
             interval_match = True
 
-    number = input("How many minutes/hours/days/weeks between emails?")
+    number = input("How many minutes/hours/days/weeks between emails?\n--> ")
     
     with open(config_path, "r") as config_file:
         config = json.load(config_file)
