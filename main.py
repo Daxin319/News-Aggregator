@@ -27,14 +27,14 @@ def main():
             fetch_and_send(),
             schedule.every(int(config["interval_number"])).minutes.do(fetch_and_send)
         ))
-    if config["interval"] == "2":
+    elif config["interval"] == "2":
         schedule.every().day.at(config["start_time"]).do(lambda: (
             fetch_and_send(),
             schedule.every(int(config["interval_number"])).hours.do(fetch_and_send)
         ))
-    if config["interval"] == "3":
+    elif config["interval"] == "3":
         schedule.every(int(config["interval_number"])).days.at(config["start_time"]).do(fetch_and_send)
-    if config["interval"] == "4":
+    elif config["interval"] == "4":
         schedule.every(int(config["interval_number"])).weeks.at(config["start_time"]).do(fetch_and_send)
 
     print("Scheduler is running. Press <Ctrl + C> to stop.")
