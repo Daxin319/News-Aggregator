@@ -1,5 +1,6 @@
 import smtplib
 import re
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -30,7 +31,8 @@ def send_email(from_email, to_email, subject, body, smtp_server, smtp_port, emai
         server.sendmail(from_email, to_email, msg.as_string())
         server.quit()
 
-        print("Email sent successfully!")
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print(f"Email sent successfully! {now}")
     except Exception as e:
         print(f"Failed to send email: {e}")
 

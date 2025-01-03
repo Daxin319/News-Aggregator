@@ -22,11 +22,16 @@ def main():
 
     # set schedule functions dependent on user selected intervals
     if config["interval"] == "1":
-        schedule.every().day.at(config["start_time"]).do(fetch_and_send)
-        schedule.every(int(config["interval_number"])).minutes.do(fetch_and_send)
+        # the hours and minutes intervals require a bit of extra code. Lambda function used to start executing the hour/minute interval after the initial start time. Preventing overlapping jobs from occuring.
+        schedule.every().day.at(config["start_time"]).do(lambda: (
+            fetch_and_send(),
+            schedule.every(int(config["interval_number"])).minutes.do(fetch_and_send)
+        ))
     if config["interval"] == "2":
-        schedule.every().day.at(config["start_time"]).do(fetch_and_send)
-        schedule.every(int(config["interval_number"])).hours.do(fetch_and_send)
+        schedule.every().day.at(config["start_time"]).do(lambda: (
+            fetch_and_send(),
+            schedule.every(int(config["interval_number"])).hours.do(fetch_and_send)
+        ))
     if config["interval"] == "3":
         schedule.every(int(config["interval_number"])).days.at(config["start_time"]).do(fetch_and_send)
     if config["interval"] == "4":
