@@ -64,12 +64,16 @@ def reset_config_file():
     if not os.path.exists(config_path):
         print(f"No config file found. Creating default config.json at {config_path}")
 
+        key = input("Please enter your API key for your thenewsapi.com account/n-->")
+        addy = input("What account will be sending this email?\n-->")
+        passw = input("Please enter the password for the sending email account\n-->")
+
         #set default json config
         new_config = {
             **default_config,
-            "API_KEY": "",
-            "email_password": "",
-            "from_address": ""
+            "API_KEY": key,
+            "email_password": passw,
+            "from_address": addy
         }
         
     else:
