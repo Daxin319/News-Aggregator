@@ -5,18 +5,22 @@ import time
 from statics import *
 
 def main():
+    #verify config file exists, if not create a blank default config.json
     ensure_config_file()
 
     new_query = input("Would you like to start a new scheduled delivery? Y/n\n-->")
     if new_query == "y" or new_query == "Y":
+        # if user requests new search, reset the config file to blank fields and run all functions to refill them with user inputs
         reset_config_file()
         define_search()
         set_destination()
         set_schedule()
     
+    # load the config file
     with open(config_path, "r") as config_file:
         config = json.load(config_file)
 
+    # set schedule functions dependent on user selected intervals
     if config["interval"] == "1":
         schedule.every().day.at(config["start_time"]).do(fetch_and_send)
         schedule.every(int(config["interval_number"])).minutes.do(fetch_and_send)
@@ -29,14 +33,19 @@ def main():
         schedule.every(int(config["interval_number"])).weeks.at(config["start_time"]).do(fetch_and_send)
 
     print("Scheduler is running. Press <Ctrl + C> to stop.")
+
+    # check 1 time per second if there is a scheduled task pending and execute any pending tasks
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 
-def reset_config_file():    
+# Reset the config json to blank values for a new search
+def reset_config_file():
+    # these keys are set by the user in the json file and will not be reset    
     static_keys = ["API_KEY", "email_password", "from_address"]
 
+    # define all mutable configurations as empty fields
     default_config = {
             "to_address": "",
             "start_time": "",
@@ -46,9 +55,11 @@ def reset_config_file():
             "topic": ""
         }
 
+    # if no config.json exists, make one
     if not os.path.exists(config_path):
         print(f"No config file found. Creating default config.json at {config_path}")
 
+        #set default json config
         new_config = {
             **default_config,
             "API_KEY": "",
@@ -57,6 +68,7 @@ def reset_config_file():
         }
         
     else:
+        # if the config file already exists just replace the mutable values and leave the static key value pairs alone
         with open(config_path, "r") as config_file:
             existing_config = json.load(config_file)
 
@@ -64,11 +76,12 @@ def reset_config_file():
         new_config = {**default_config, **saved_config}
         print("Search parameters reset to default.")
 
+    #write to file
     with open(config_path, "w") as config_file:
         json.dump(new_config, config_file, indent=4)
 
 def ensure_config_file():
-    
+    # check if file exists, if not then create one with all fields present and blank.
     if not os.path.exists(config_path):
         print("No config file found, creating config.json.")
 
@@ -84,12 +97,14 @@ def ensure_config_file():
             "from_address": ""
         }
 
+        # write default config to file
         with open(config_path, "w") as config_file:
             json.dump(default_config, config_file, indent=4)
 
     else:
         print("Config file verified.")
 
+# open the config file, pull the news stories from the API, generate the email body, and send the email
 def fetch_and_send():
     with open('config.json') as config_file:
         config = json.load(config_file)
@@ -105,7 +120,9 @@ def fetch_and_send():
     email_body = generate_email_body(news_stories)
     send_email(from_address, to_address, 'Your Top News Stories', email_body, "smtp.gmail.com", 587, email_password)
 
+# set the schedule for email delivery
 def set_schedule():
+    # input from user for time to start the program
     match = False
     while match == False:
         start_time = input("What time would you like your email to be sent? Use HH:MM in 24 hour format (6:00pm is 18:00, 8:15am is 08:15, etc)\n--> ")
@@ -114,17 +131,20 @@ def set_schedule():
         else:
             match = True
     
+    # input from user to determine length of interval units
     interval_match = False
     while interval_match == False:
-        interval = input("How long of an interval between emails?\n 1 - Minutes\n2 - Hours\n3 - Days\n4 - Weeks\n--> ")
+        interval = input("How long of an interval between emails?\n1 - Minutes\n2 - Hours\n3 - Days\n4 - Weeks\n--> ")
         valid_choices = ["1", "2", "3", "4"]
         if interval not in valid_choices:
             print("Invalid option, please try again.")
         else:
             interval_match = True
-
+    
+    # input to determine how many units each interval will be
     number = input("How many minutes/hours/days/weeks between emails?\n--> ")
     
+    # set the fields in the config file
     with open(config_path, "r") as config_file:
         config = json.load(config_file)
 

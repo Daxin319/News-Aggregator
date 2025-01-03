@@ -1,11 +1,12 @@
 import http.client, urllib.parse
 import json
-import os
 from datetime import date, timedelta
 from email_funcs import *
 from statics import *
 
+# function to make the api pull based on user set inputs
 def fetch_news(api_token, categories, search, limit=50):
+    # set the connection and prepare parameters, this is set to only pull news stories from the last 48 hours.
     conn = http.client.HTTPSConnection('api.thenewsapi.com')
     params = urllib.parse.urlencode({
         'api_token': api_token,
@@ -16,17 +17,20 @@ def fetch_news(api_token, categories, search, limit=50):
         'limit': limit
     })
     
+    # make the request
     conn.request('GET', f'/v1/news/all?{params}')
     response = conn.getresponse()
     data = response.read()
-
+    
+    # decode the response
     try:
         news = json.loads(data.decode('utf-8'))
         return news.get('data', [])
     except json.JSONDecodeError:
         print('Error decoding JSON response')
         return []
-    
+
+# function to check for valid catagories    
 def check_valid_cats(list):
     valid_cats = ["general", "science", "sports", "business", "health", "entertainment", "tech", "politics", "food", "travel"]
     
@@ -36,7 +40,8 @@ def check_valid_cats(list):
             return False
         pass
     return True
-            
+
+# funciton to set all the search fields in the config.json            
 def define_search():
     s_input = input("What are you searching for? Press <Enter> to submit --> ")
     while True:
@@ -59,7 +64,8 @@ def define_search():
                 json.dump(config, config_file, indent=4)
             
             break
-        
+
+# function to set the destination email address        
 def set_destination():
     while True:
         to_input = input("Where would you like your email sent?\n--> ")

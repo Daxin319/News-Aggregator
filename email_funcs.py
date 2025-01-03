@@ -3,6 +3,7 @@ import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# function to generate the basic email body
 def generate_email_body(news_stories):
     if not news_stories:
         return "No results found."
@@ -12,6 +13,7 @@ def generate_email_body(news_stories):
         body += f"- {story['title']} ({story['source']})\n  {story['url']}\n\n"
     return body
 
+# function to send the email
 def send_email(from_email, to_email, subject, body, smtp_server, smtp_port, email_password):
     try:
         # Create message
@@ -32,6 +34,7 @@ def send_email(from_email, to_email, subject, body, smtp_server, smtp_port, emai
     except Exception as e:
         print(f"Failed to send email: {e}")
 
+#function to check if email address is in proper format (xxxxxxxxx@yyyyy.zzz would pass this check right now, but I don't really care about validating that the email is real, only that it is the proper format for an email to be sent)
 def validate_email(string):
     if not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", string):
         print("<------------------------------Invalid email address, please try again------------------------------>")
